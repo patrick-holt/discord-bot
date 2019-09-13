@@ -1,0 +1,3 @@
+I always liked the idea of having dedicated voice channels, especially one for when playing - I don't want people to randomly drop in and remove my focus. So as a small exercise I wanted to create a bot that could move users who opened a game, allowing us lazy bastards to never having to think about moving around.
+
+This project was meant as an exercise in Python, but I realised that in my quest for becoming skilled in frontend development, it would make more sense to use JavaScript for this.
