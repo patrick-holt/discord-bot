@@ -15,6 +15,14 @@ client.on('message', msg => {
   if (msg.content === 'ping') {
     msg.reply('pong');
   }
+
+  // If Musk tries to be sexy with the bot he will succeed
+  if (msg.content === 'sup bot?' && msg.author.username === 'Musk') {
+    msg.reply('Whattup your sexy husk of meat?');
+  // No one else will
+  } else if (msg.content === 'sup bot?') {
+    msg.reply('You\'re not the summer prince I\'m looking for...');
+  }
 });
 
 // On the event that a user has the presence updated
