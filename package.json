@@ -1,0 +1,23 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "description": "I always liked the idea of having dedicated voice channels, especially one for when playing - I don't want people to randomly drop in and remove my focus. So as a small exercise I wanted to create a bot that could move users who opened a game, allowing us lazy bastards to never having to think about moving around.",
+  "main": "ingame-mover.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patrick-holt/discord-bot-ingame-mover.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patrick-holt/discord-bot-ingame-mover/issues"
+  },
+  "homepage": "https://github.com/patrick-holt/discord-bot-ingame-mover#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
+}
