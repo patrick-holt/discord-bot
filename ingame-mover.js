@@ -20,18 +20,26 @@ client.on('message', msg => {
   }
 });
 
-client.on('voiceStateUpdate', (oldMember, newMember) => {
-  if (newMember.voiceChannelID === generalVoice) {
-    console.log("General voice chat update");
-    // Moves a member to a voice channel
+// On the event that a user has the presence updated
+client.on('presenceUpdate', (oldMember, newMember) => {
+  // Are they in the general voice channel and have started a game, then...
+  if (newMember.voiceChannelID === generalVoice && newMember.presence.game != null) {
+    console.log(`${newMember.displayName} started ${newMember.presence.game}, let's move them.`)
+
+    // Move member to ingame voice channel
     newMember.setVoiceChannel(ingameVoice)
     .then(() => console.log(`Moved ${newMember.displayName}`))
     .catch(console.error)
   }
-})
 
-client.on('presenceUpdate', (oldMember, newMember) => {
-  console.log(`Client ${newMember.displayName} just changed their presence to ${newMember.presence.status}`)
+  if (newMember.voiceChannelID === ingameVoice && newMember.presence.game === null) {
+    console.log(`${newMember.displayName} closed the game. Moving back.`)
+
+    // Move member to general voice channel
+    newMember.setVoiceChannel(generalVoice)
+    .then(() => console.log(`Moved ${newMember.displayName}`))
+    .catch(console.error)
+  }
 })
 
 client.login(auth.token);
