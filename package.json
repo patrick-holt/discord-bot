@@ -4,6 +4,7 @@
   "description": "I always liked the idea of having dedicated voice channels, especially one for when playing - I don't want people to randomly drop in and remove my focus. So as a small exercise I wanted to create a bot that could move users who opened a game, allowing us lazy bastards to never having to think about moving around.",
   "main": "ingame-mover.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ingame-mover.js"
   },
   "repository": {
