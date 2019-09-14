@@ -14,10 +14,6 @@ client.on('message', msg => {
   if (msg.content === 'ping') {
     msg.reply('pong');
   }
-
-  if (msg.content === 'move') {
-
-  }
 });
 
 // On the event that a user has the presence updated
@@ -43,5 +39,3 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 })
 
 client.login(auth.token);
-
-602869084085944334
