@@ -42,4 +42,4 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 
 // Use the first one if on my own system, second is for Heroku
 //client.login(auth.token);
-client.login();
+client.login(process.env.CLIENT_TOKEN);
