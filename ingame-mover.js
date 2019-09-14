@@ -1,6 +1,8 @@
+require('dotenv').config(); 
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const auth = require('./auth.json');
+// For use on my own system
+//const auth = require('./auth.json');
 
 //Channel IDs
 const generalVoice = '602869084085944334';
@@ -38,4 +40,6 @@ client.on('presenceUpdate', (oldMember, newMember) => {
   }
 })
 
-client.login(auth.token);
+// Use the first one if on my own system, second is for Heroku
+//client.login(auth.token);
+client.login();
