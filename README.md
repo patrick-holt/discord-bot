@@ -7,9 +7,11 @@ This project was meant as an exercise in Python, but I realised that in my quest
 As of **14/09/19** I am having trouble getting the bot to do what I want. The functionality is there - at least a basic version - but I can't get the status to display right. It gives me the user's status before the update happened, meaning it sets things in motion when it's too late. I can see that the documentation describes "newMember" which should work, but I am unsure how to handle that parameter.
 **UPDATE:** I found that I had to state the parameter as (oldMember, newMember) for it to work. The bot now works as intended. I need to add it to a server so it always runs. Future functionality would include an opt-out function, so you can write a command (e.g. !move-opt-out) and never be moved again.
 
+**15/09/19** I got the bot running on Heroku and worked on commands a bit. The mover can now be turned off server wide - still, I would like for the specific user to opt out.
+
 # To Do
 A list of all the things I would like the bot to do.
-* [ ] Always run - use Heroku or similar
+* [x] Always run - use Heroku or similar
 * [ ] Allow users to opt-out/-in
 * [ ] Stop function - no moving
 * [ ] Move user to game specific channel - useful for often-played games
