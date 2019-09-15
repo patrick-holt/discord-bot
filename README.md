@@ -13,5 +13,6 @@ As of **14/09/19** I am having trouble getting the bot to do what I want. The fu
 A list of all the things I would like the bot to do.
 * [x] Always run - use Heroku or similar
 * [ ] Allow users to opt-out/-in
-* [ ] Stop function - no moving
+* [x] Stop function - no moving
 * [ ] Move user to game specific channel - useful for often-played games
+* [ ] Work in something with Steam API?
