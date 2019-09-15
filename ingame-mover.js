@@ -62,6 +62,11 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 
   // Are they in the general voice channel and have started a game, then...
   if (newMember.voiceChannelID === generalVoice && newMember.presence.game != null) {
+    // Should not move when Spotify is used
+    if (newMember.presence.game == 'Spotify') {
+      return;
+    }
+
     console.log(`${newMember.displayName} started ${newMember.presence.game}, let's move them.`)
 
     // Move member to ingame voice channel
