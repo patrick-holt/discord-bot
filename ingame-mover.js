@@ -109,15 +109,36 @@ function ProcessCommand(receivedMessage) {
 // Turns move on game join on/off
 function MoveCommand(arguments, receivedMessage) {
   if (arguments < 1) {
-    receivedMessage.reply("Need argument 'on' or 'off'");
-  } else if (arguments[0] == 'on') {
-    movementOn = true;
-    receivedMessage.reply("Turning ingame mover ON!");
-  } else if (arguments[0] == 'off') {
-    movementOn = false;
-    receivedMessage.reply("Turning ingame mover OFF!");
-  } else {
-    receivedMessage.reply("Unknown argument, use 'on' or 'off'");
+    receivedMessage.reply("Need argument 'on'/'off' or 'opt'");
+  } else if (arguments > 1) {
+    let argument = arguments[0];
+    switch (argument) {
+      case 'on':
+        movementOn = true;
+        receivedMessage.reply("Turning ingame mover ON!");
+        break;
+      case 'off':
+        movementOn = false;
+        receivedMessage.reply("Turning ingame mover OFF!");
+        break;
+      case 'opt':
+        if (arguments[1] != null) {
+          let state = arguments[1];
+        } else {
+          receivedMessage.reply("Need argument of opting 'in' or 'out'");
+          return;
+        }
+        switch (state) {
+          case 'in':
+            receivedMessage.reply("You will now be moved on game start");
+            break;
+          case 'out':
+            receivedMessage.reply("You will no longer be moved");
+            break;
+        }
+      default:
+        receivedMessage.reply("Unknown argument, use 'on' or 'off'");
+    }
   }
 }
 //
