@@ -16,14 +16,14 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
   // Print all names, id's, and roles
-  client.guilds.forEach((guild) => {
-    guild.members.forEach((member) => {
-      console.log(`${member.displayName} ${member.id} ${member.highestRole}`);
-      if (member.highestRole.id === roleAdminID) {
-        console.log(`${member.displayName} is an Admin`);
-      }
-    })
-  })
+  // client.guilds.forEach((guild) => {
+  //   guild.members.forEach((member) => {
+  //     console.log(`${member.displayName} ${member.id} ${member.highestRole}`);
+  //     if (member.highestRole.id === roleAdminID) {
+  //       console.log(`${member.displayName} is an Admin`);
+  //     }
+  //   })
+  // })
 });
 
 // Event, whenever a message is received 
