@@ -1,7 +1,8 @@
+const fs = require('fs'); //importing file save
 const Discord = require('discord.js');
 const client = new Discord.Client();
 // For use on my own system
-//const auth = require('./auth.json');
+const auth = require('./auth.json');
 
 // Channel IDs
 const generalVoice = '602869084085944334';
@@ -35,10 +36,6 @@ client.on('message', msg => {
 
   // We handle commands differently
   if (msg.content.startsWith('!')) {
-    if (msg.author.tag != roleAdminID) {
-      msg.reply("Commands require admin rights");
-      return;
-    }
     ProcessCommand(msg);
   }
 
@@ -100,6 +97,10 @@ function ProcessCommand(receivedMessage) {
   console.log("Arguments: " + arguments) // There may not be any arguments
 
   if (primaryCommand == 'move') {
+    if (receivedMessage.author.tag != roleAdminID) {
+      receivedMessage.reply("!move command require admin rights");
+      return;
+    }
     MoveCommand(arguments, receivedMessage);
   } else {
     receivedMessage.reply("Command does not exist")
@@ -133,6 +134,7 @@ function MoveCommand(arguments, receivedMessage) {
             receivedMessage.reply("You will now be moved on game start");
             break;
           case 'out':
+            OptOutUser(receivedMessage.author);
             receivedMessage.reply("You will no longer be moved");
             break;
         }
@@ -141,10 +143,18 @@ function MoveCommand(arguments, receivedMessage) {
     }
   }
 }
+
+function OptInUser(user) {
+
+}
+
+function OptOutUser(user) {
+  
+}
 //
 //
 //
 
 // Use the first one if on my own system, second is for Heroku
-//client.login(auth.token);
-client.login(process.env.CLIENT_TOKEN);
+client.login(auth.token);
+//client.login(process.env.CLIENT_TOKEN);
