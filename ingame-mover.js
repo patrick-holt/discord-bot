@@ -124,4 +124,4 @@ function MoveCommand(arguments, receivedMessage) {
 
 // Use the first one if on my own system, second is for Heroku
 //client.login(auth.token);
-//client.login(process.env.CLIENT_TOKEN);
+client.login(process.env.CLIENT_TOKEN);
