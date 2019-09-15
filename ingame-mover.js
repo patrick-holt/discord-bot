@@ -3,10 +3,13 @@ const client = new Discord.Client();
 // For use on my own system
 const auth = require('./auth.json');
 
-//Channel IDs
+// Channel IDs
 const generalVoice = '602869084085944334';
 const ingameVoice = '603324302703591457';
-const roleAdminID = '622690871153786901';
+const roleAdminID = 'Holt#3497';
+
+// Variables
+var movementOn = true;
 
 // Event, when bot first runs
 client.on('ready', () => {
@@ -15,7 +18,7 @@ client.on('ready', () => {
   // Print all names, id's, and roles
   client.guilds.forEach((guild) => {
     guild.members.forEach((member) => {
-      console.log(`${member.displayName} ${member.id} ${member.highestRole.id}`);
+      console.log(`${member.displayName} ${member.id} ${member.highestRole}`);
       if (member.highestRole.id === roleAdminID) {
         console.log(`${member.displayName} is an Admin`);
       }
@@ -32,6 +35,10 @@ client.on('message', msg => {
 
   // We handle commands differently
   if (msg.content.startsWith('!')) {
+    if (msg.author.tag != roleAdminID) {
+      msg.reply("Commands require admin rights");
+      return;
+    }
     ProcessCommand(msg);
   }
 
@@ -49,8 +56,13 @@ client.on('message', msg => {
   }
 });
 
-// On the event that a user has the presence updated
+// Part that handles the decission on moving the user
 client.on('presenceUpdate', (oldMember, newMember) => {
+  // If bool isn't true, we will never run the rest
+  if (movementOn != true) {
+    return;
+  }
+
   // Are they in the general voice channel and have started a game, then...
   if (newMember.voiceChannelID === generalVoice && newMember.presence.game != null) {
     console.log(`${newMember.displayName} started ${newMember.presence.game}, let's move them.`)
@@ -74,14 +86,37 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 //
 // Functions
 //
+
+// Processes the command and decide what function to run
 function ProcessCommand(receivedMessage) {
-  let fullCommand = msg.content.substr(1); // Remove exclamationmark
-  let splitCommand = fullCommand.split(" "); // Split up message
+  let fullCommand = receivedMessage.content.substr(1); // Remove exclamationmark
+  let splitCommand = fullCommand.split(' '); // Split up message
   let primaryCommand = splitCommand[0]; // First word is the command
   let arguments = splitCommand.slice(1); // All other words are arguments
 
   console.log("Command received: " + primaryCommand)
   console.log("Arguments: " + arguments) // There may not be any arguments
+
+  if (primaryCommand == 'move') {
+    MoveCommand(arguments, receivedMessage);
+  } else {
+    receivedMessage.reply("Command does not exist")
+  }
+}
+
+// Turns move on game join on/off
+function MoveCommand(arguments, receivedMessage) {
+  if (arguments < 1) {
+    receivedMessage.reply("Need argument 'on' or 'off'");
+  } else if (arguments[0] == 'on') {
+    movementOn = true;
+    receivedMessage.reply("Turning ingame mover ON!");
+  } else if (arguments[0] == 'off') {
+    movementOn = false;
+    receivedMessage.reply("Turning ingame mover OFF!");
+  } else {
+    receivedMessage.reply("Unknown argument, use 'on' or 'off'");
+  }
 }
 //
 //
