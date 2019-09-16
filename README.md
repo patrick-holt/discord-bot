@@ -9,6 +9,8 @@ As of **14/09/19** I am having trouble getting the bot to do what I want. The fu
 
 **15/09/19** I got the bot running on Heroku and worked on commands a bit. The mover can now be turned off server wide - still, I would like for the specific user to opt out.
 
+**16/09/19** I wanted to change the way command arguments were checked, but apparently switches aren't really possible. At least not when I before hand wanted to make a check if there were more than one argument. I might return to it later to see of something can be done. I found help online to help me get the filesave working. Based on user ID I can now make an entry with what I need. I should be able to parse it and check entries, but that remains to be seen.
+
 # To Do
 A list of all the things I would like the bot to do.
 * [x] Always run - use Heroku or similar
