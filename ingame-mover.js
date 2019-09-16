@@ -16,21 +16,6 @@ var movementOn = true;
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
-  // JSON file reading and writing - WORKS 
-  var path = './user-settings.json'
-  var read = fs.readFileSync(path);
-  var parsedFile = JSON.parse(read); //ready for use
-  var userID = 315786485515157515 //user id here
-  if (!parsedFile[userID]) { //this checks if data for the user has already been created
-    parsedFile[userID] = {ingameMoveAllowed: false}; //if not, create it
-    fs.writeFileSync(path, JSON.stringify(parsedFile, null, 2));
-  } else {
-    //as an example, I will give the owner of the id 50 xp and the role "Awesome Role"
-    // parsedFile[userID] = {ingameMoveAllowed: false};
-    // fs.writeFileSync(path, JSON.stringify(parsedFile, null, 2));
-    // console.log(`User can be moved = ${ingameMoveAllowed}`)
-  }
-
   // Print all names, id's, and roles
   client.guilds.forEach((guild) => {
     guild.members.forEach((member) => {
@@ -146,8 +131,10 @@ function MoveCommand(arguments, receivedMessage) {
     if (arguments[1] != null) {
       let state = arguments[1];
       if (state == 'in') {
+        receivedMessage.reply("You will now be moved on game start");
         OptInUser(receivedMessage.author);
       } else if (state == 'out') {
+        receivedMessage.reply("You will no longer be moved");
         OptOutUser(receivedMessage.author);
       }
     } else {
@@ -160,8 +147,6 @@ function MoveCommand(arguments, receivedMessage) {
 }
 
 function OptInUser(user) {
-  receivedMessage.reply("You will now be moved on game start");
-
   // I can probably make a function for a single parse, instead of doing it every
   // where, but that will be changed at a later point
   var path = './user-settings.json'
@@ -175,7 +160,6 @@ function OptInUser(user) {
 }
 
 function OptOutUser(user) {
-  receivedMessage.reply("You will no longer be moved");
   var path = './user-settings.json'
   var read = fs.readFileSync(path);
   var parsedFile = JSON.parse(read); //ready for use
@@ -192,10 +176,15 @@ function CheckUserOpt(user) {
   var read = fs.readFileSync(path);
   var parsedFile = JSON.parse(read); //ready for use
   var userID = user.id //user id here
-  if (parsedFile[userID].ingameMoveAllowed) {
+  if (!parsedFile.hasOwnProperty(userID)) { // Not on list? Let's move them
+    console.log(`No move settings for ${user.displayName}`);
     return true;
   } else {
-    return false;
+    if (parsedFile[userID].ingameMoveAllowed) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   //WHAT IF THEY AREN'T ON THE LIST???
