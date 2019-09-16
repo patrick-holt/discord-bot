@@ -20,13 +20,13 @@ client.on('ready', () => {
   var path = './user-settings.json'
   var read = fs.readFileSync(path);
   var parsedFile = JSON.parse(read); //ready for use
-  var userId = 315786485515157515 //user id here
-  if (!parsedFile[userId]) { //this checks if data for the user has already been created
-    parsedFile[userId] = {ingameMoveAllowed: false}; //if not, create it
+  var userID = 315786485515157515 //user id here
+  if (!parsedFile[userID]) { //this checks if data for the user has already been created
+    parsedFile[userID] = {ingameMoveAllowed: false}; //if not, create it
     fs.writeFileSync(path, JSON.stringify(parsedFile, null, 2));
   } else {
     //as an example, I will give the owner of the id 50 xp and the role "Awesome Role"
-    // parsedFile[userId] = {ingameMoveAllowed: false};
+    // parsedFile[userID] = {ingameMoveAllowed: false};
     // fs.writeFileSync(path, JSON.stringify(parsedFile, null, 2));
     // console.log(`User can be moved = ${ingameMoveAllowed}`)
   }
@@ -73,7 +73,9 @@ client.on('presenceUpdate', (oldMember, newMember) => {
   }
 
   // Are they in the general voice channel and have started a game, then...
-  if (newMember.voiceChannelID === generalVoice && newMember.presence.game != null) {
+  if (newMember.voiceChannelID === generalVoice 
+    && newMember.presence.game != null
+    && CheckUserOpt(newMember.id)) {
     // Should not move when Spotify is used
     if (newMember.presence.game == 'Spotify') {
       return;
@@ -87,7 +89,10 @@ client.on('presenceUpdate', (oldMember, newMember) => {
     .catch(console.error)
   }
 
-  if (newMember.voiceChannelID === ingameVoice && newMember.presence.game === null) {
+  // Are they in the ingame voice channel and closed a game, then...
+  if (newMember.voiceChannelID === ingameVoice 
+    && newMember.presence.game === null
+    && CheckUserOpt(newMember.id)) {
     console.log(`${newMember.displayName} closed the game. Moving back.`)
 
     // Move member to general voice channel
@@ -157,11 +162,43 @@ function MoveCommand(arguments, receivedMessage) {
 function OptInUser(user) {
   receivedMessage.reply("You will now be moved on game start");
 
+  // I can probably make a function for a single parse, instead of doing it every
+  // where, but that will be changed at a later point
+  var path = './user-settings.json'
+  var read = fs.readFileSync(path);
+  var parsedFile = JSON.parse(read); //ready for use
+  var userID = user.id; //user id here
+  if (!parsedFile[userID]) { //this checks if data for the user has already been created
+    parsedFile[userID] = {ingameMoveAllowed: true}; //if not, create it
+    fs.writeFileSync(path, JSON.stringify(parsedFile, null, 2));
+  }
 }
 
 function OptOutUser(user) {
   receivedMessage.reply("You will no longer be moved");
-  
+  var path = './user-settings.json'
+  var read = fs.readFileSync(path);
+  var parsedFile = JSON.parse(read); //ready for use
+  var userID = user.id; //user id here
+  if (!parsedFile[userID]) { //this checks if data for the user has already been created
+    parsedFile[userID] = {ingameMoveAllowed: false}; //if not, create it
+    fs.writeFileSync(path, JSON.stringify(parsedFile, null, 2));
+  }
+}
+
+// User settings will be changed to see if they have opted in/outS
+function CheckUserOpt(user) {
+  var path = './user-settings.json'
+  var read = fs.readFileSync(path);
+  var parsedFile = JSON.parse(read); //ready for use
+  var userID = user.id //user id here
+  if (parsedFile[userID].ingameMoveAllowed) {
+    return true;
+  } else {
+    return false;
+  }
+
+  //WHAT IF THEY AREN'T ON THE LIST???
 }
 //
 //
