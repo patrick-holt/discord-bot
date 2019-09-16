@@ -16,15 +16,30 @@ var movementOn = true;
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
+  // JSON file reading and writing - WORKS 
+  var path = './user-settings.json'
+  var read = fs.readFileSync(path);
+  var parsedFile = JSON.parse(read); //ready for use
+  var userId = 315786485515157515 //user id here
+  if (!parsedFile[userId]) { //this checks if data for the user has already been created
+    parsedFile[userId] = {ingameMoveAllowed: false}; //if not, create it
+    fs.writeFileSync(path, JSON.stringify(parsedFile, null, 2));
+  } else {
+    //as an example, I will give the owner of the id 50 xp and the role "Awesome Role"
+    // parsedFile[userId] = {ingameMoveAllowed: false};
+    // fs.writeFileSync(path, JSON.stringify(parsedFile, null, 2));
+    // console.log(`User can be moved = ${ingameMoveAllowed}`)
+  }
+
   // Print all names, id's, and roles
-  // client.guilds.forEach((guild) => {
-  //   guild.members.forEach((member) => {
-  //     console.log(`${member.displayName} ${member.id} ${member.highestRole}`);
-  //     if (member.highestRole.id === roleAdminID) {
-  //       console.log(`${member.displayName} is an Admin`);
-  //     }
-  //   })
-  // })
+  client.guilds.forEach((guild) => {
+    guild.members.forEach((member) => {
+      console.log(`${member.displayName} ${member.id} ${member.highestRole}`);
+      if (member.highestRole.id === roleAdminID) {
+        console.log(`${member.displayName} is an Admin`);
+      }
+    })
+  })
 });
 
 // Event, whenever a message is received 
@@ -97,10 +112,6 @@ function ProcessCommand(receivedMessage) {
   console.log("Arguments: " + arguments) // There may not be any arguments
 
   if (primaryCommand == 'move') {
-    if (receivedMessage.author.tag != roleAdminID) {
-      receivedMessage.reply("!move command require admin rights");
-      return;
-    }
     MoveCommand(arguments, receivedMessage);
   } else {
     receivedMessage.reply("Command does not exist")
@@ -111,44 +122,45 @@ function ProcessCommand(receivedMessage) {
 function MoveCommand(arguments, receivedMessage) {
   if (arguments < 1) {
     receivedMessage.reply("Need argument 'on'/'off' or 'opt'");
-  } else if (arguments > 1) {
-    let argument = arguments[0];
-    switch (argument) {
-      case 'on':
-        movementOn = true;
-        receivedMessage.reply("Turning ingame mover ON!");
-        break;
-      case 'off':
-        movementOn = false;
-        receivedMessage.reply("Turning ingame mover OFF!");
-        break;
-      case 'opt':
-        if (arguments[1] != null) {
-          let state = arguments[1];
-        } else {
-          receivedMessage.reply("Need argument of opting 'in' or 'out'");
-          return;
-        }
-        switch (state) {
-          case 'in':
-            receivedMessage.reply("You will now be moved on game start");
-            break;
-          case 'out':
-            OptOutUser(receivedMessage.author);
-            receivedMessage.reply("You will no longer be moved");
-            break;
-        }
-      default:
-        receivedMessage.reply("Unknown argument, use 'on' or 'off'");
+  } else if (arguments[0] == 'on') { // ADMIN command to turn server wide movement ON
+    if (receivedMessage.author.tag != roleAdminID) {
+      receivedMessage.reply("!move command require admin rights");
+      return;
     }
+    movementOn = true;
+    receivedMessage.reply("Turning ingame mover ON!");
+  } else if (arguments[0] == 'off') { // ADMIN command to turn server wide movement OFF
+    if (receivedMessage.author.tag != roleAdminID) {
+      receivedMessage.reply("!move command require admin rights");
+      return;
+    }
+    movementOn = false;
+    receivedMessage.reply("Turning ingame mover OFF!");
+  } else if (arguments[0] == 'opt') { // USER command to decide movement
+    // If there is no following argument, we return message
+    if (arguments[1] != null) {
+      let state = arguments[1];
+      if (state == 'in') {
+        OptInUser(receivedMessage.author);
+      } else if (state == 'out') {
+        OptOutUser(receivedMessage.author);
+      }
+    } else {
+      receivedMessage.reply("Need argument of opting 'in' or 'out'");
+      return;
+    }
+  } else {
+    receivedMessage.reply("Unknown argument 'on'/'off' or 'opt'");
   }
 }
 
 function OptInUser(user) {
+  receivedMessage.reply("You will now be moved on game start");
 
 }
 
 function OptOutUser(user) {
+  receivedMessage.reply("You will no longer be moved");
   
 }
 //
