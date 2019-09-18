@@ -2,7 +2,7 @@ const fs = require('fs'); //importing file save
 const Discord = require('discord.js');
 const client = new Discord.Client();
 // For use on my own system
-//const auth = require('./auth.json');
+const auth = require('./auth.json');
 
 // Channel IDs
 const generalVoice = '602869084085944334';
@@ -106,7 +106,7 @@ function ProcessCommand(receivedMessage) {
   } else if (primaryCommand == 'move') {
     MoveCommand(arguments, receivedMessage);
   } else if (primaryCommand == 'roll') {
-
+    DiceRoll(arguments, receivedMessage);
   } else {
     receivedMessage.reply("Command does not exist")
   }
@@ -117,7 +117,9 @@ function HelpCommand(arguments, receivedMessage) {
   receivedMessage.reply("Here are the list of commands that you can use: \
   \n !move [on/off/opt] \
   \n - on and off is an admin command to switch the functionality serverwide \
-  \n - opt requires its own arguments [in/out] and switches on a user level");
+  \n - opt requires its own arguments [in/out] and switches on a user level \
+  \n !roll [x]d[y] \
+  \n - x is the number of dice, y the eyes on those dice");
 }
 
 // Turns move on game join on/off
@@ -159,8 +161,20 @@ function MoveCommand(arguments, receivedMessage) {
 }
 
 // Rolls virtual dice and replies with a result
+// Example: !roll 2d20
 function DiceRoll(arguments, receivedMessage) {
+  let dice = arguments[0].split('d'); // Split first argument at d
+  let diceAmount = dice[0];
+  let diceType = dice[1];
+
+  console.log(`Rolling ${diceAmount} dice, with ${diceType} number of eyes`);
   
+  for (i = 0; i < diceAmount.length; i++) {
+    let min = 1; // Min value on die always 1
+    let max = diceType;
+    let result = Math.floor(Math.random() * (max - min + 1)) + min;
+    receivedMessage.reply(`Roll number ${i + 1}: ${result}`);
+  }
 }
 
 function OptInUser(user) {
@@ -211,5 +225,5 @@ function CheckUserOpt(user) {
 //
 
 // Use the first one if on my own system, second is for Heroku
-//client.login(auth.token);
-client.login(process.env.CLIENT_TOKEN);
+client.login(auth.token);
+//client.login(process.env.CLIENT_TOKEN);
