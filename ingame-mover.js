@@ -101,11 +101,23 @@ function ProcessCommand(receivedMessage) {
   console.log("Command received: " + primaryCommand)
   console.log("Arguments: " + arguments) // There may not be any arguments
 
-  if (primaryCommand == 'move') {
+  if (primaryCommand == 'help') {
+    HelpCommand(arguments, receivedMessage);
+  } else if (primaryCommand == 'move') {
     MoveCommand(arguments, receivedMessage);
+  } else if (primaryCommand == 'roll') {
+
   } else {
     receivedMessage.reply("Command does not exist")
   }
+}
+
+// Gives a reply with all current commands
+function HelpCommand(arguments, receivedMessage) {
+  receivedMessage.reply("Here are the list of commands that you can use: \
+  \n !move [on/off/opt] \
+  \n - on and off is an admin command to switch the functionality serverwide \
+  \n - opt requires its own arguments [in/out] and switches on a user level");
 }
 
 // Turns move on game join on/off
@@ -144,6 +156,11 @@ function MoveCommand(arguments, receivedMessage) {
   } else {
     receivedMessage.reply("Unknown argument 'on'/'off' or 'opt'");
   }
+}
+
+// Rolls virtual dice and replies with a result
+function DiceRoll(arguments, receivedMessage) {
+  
 }
 
 function OptInUser(user) {
