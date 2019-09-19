@@ -162,19 +162,35 @@ function MoveCommand(arguments, receivedMessage) {
 
 // Rolls virtual dice and replies with a result
 // Example: !roll 2d20
-function DiceRoll(arguments, receivedMessage) {
+async function DiceRoll(arguments, receivedMessage) {
   let dice = arguments[0].split('d'); // Split first argument at d
   let diceAmount = dice[0];
   let diceType = dice[1];
 
+  // We need some maximum to keep the bot sane
+  if (diceAmount > 10 || diceType > 100) {
+    receivedMessage.reply("Too many dice or too big, pal. Try smaller numbers.");
+    return;
+  }
+
+  let filler = "Roll #";
+
   console.log(`Rolling ${diceAmount} dice, with ${diceType} number of eyes`);
   
-  for (i = 0; i < diceAmount.length; i++) {
+  for (i = 0; i < diceAmount; i++) {
     let min = 1; // Min value on die always 1
     let max = diceType;
     let result = Math.floor(Math.random() * (max - min + 1)) + min;
-    receivedMessage.reply(`Roll number ${i + 1}: ${result}`);
+
+    if (i == 0) {
+      var stringResults = '\n' + filler + (i+1) + ': ' + result + '\n'
+    } else if (i != diceAmount - 1) {
+      stringResults = stringResults + filler + (i+1) + ': ' + result + '\n';
+    } else {
+      stringResults = stringResults + filler + (i+1) + ': ' + result;
+    }
   }
+  receivedMessage.reply(stringResults);
 }
 
 function OptInUser(user) {
