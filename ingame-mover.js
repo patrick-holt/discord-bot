@@ -163,7 +163,29 @@ function MoveCommand(arguments, receivedMessage) {
 // Rolls virtual dice and replies with a result
 // Example: !roll 2d20
 async function DiceRoll(arguments, receivedMessage) {
-  let dice = arguments[0].split('d'); // Split first argument at d
+  let command = arguments.join(); // Join seemed easier than to change how commands are handled
+  command = command.replace(/,/g, ""); // Remove spaces globally
+
+  // Proceed differently depending on what it contains
+  if (command.includes('+')) {
+    var addition = true;
+    var sym = '+';
+    var arguments = command.split('+');
+    var dice = arguments[0].split('d');
+    var modifier = arguments[1];
+  } else if (command.includes('-')) {
+    var addition = false;
+    var sym = '-';
+    var arguments = command.split('-');
+    var dice = arguments[0].split('d');
+    var modifier = arguments[1];
+  } else {
+    var addition = null;
+    var sym = '';
+    var dice = command.split('d');
+    var modifier = '';
+  }
+
   let diceAmount = dice[0];
   let diceType = dice[1];
 
@@ -173,24 +195,48 @@ async function DiceRoll(arguments, receivedMessage) {
     return;
   }
 
-  let filler = "Roll #";
+  let filler = "Roll #"; // Want to know the current roll?
 
+  // Print to console
   console.log(`Rolling ${diceAmount} dice, with ${diceType} number of eyes`);
-  
+  if (addition !== null) {
+    if (addition) {
+      console.log(`Modify by + ${modifier}`);
+    } else if (!addition) {
+      console.log(`Modify by - ${modifier}`);
+    }
+  }
+
+  // Rolling the die
   for (i = 0; i < diceAmount; i++) {
     let min = 1; // Min value on die always 1
     let max = diceType;
     let result = Math.floor(Math.random() * (max - min + 1)) + min;
 
-    if (i == 0) {
-      var stringResults = '\n' + filler + (i+1) + ': ' + result + '\n'
-    } else if (i != diceAmount - 1) {
-      stringResults = stringResults + filler + (i+1) + ': ' + result + '\n';
+    if (addition !== null) {
+      if (addition) {
+        var modifiedResult = Number(result) + Number(modifier); // Turn into number and add
+      } else if (!addition) {
+        var modifiedResult = Number(result) - Number(modifier);
+      }
     } else {
-      stringResults = stringResults + filler + (i+1) + ': ' + result;
+      modifiedResult = result;
+    }
+
+    // Mark the roll number
+    if (i == 0) {
+      var stringResults = '\n' + filler + (i+1) + ': ' 
+      + `(${result}) ` + modifiedResult + '\n';
+    } else if (i != diceAmount - 1) {
+      stringResults = stringResults + filler + (i+1) + ': ' 
+      + `(${result}) ` + modifiedResult + '\n';
+    } else {
+      stringResults = stringResults + filler + (i+1) + ': '
+      + `(${result}) ` + modifiedResult;
     }
   }
-  receivedMessage.reply(stringResults);
+
+  receivedMessage.reply(`(nat) mod ${sym} ${modifier}` + stringResults);
 }
 
 function OptInUser(user) {
