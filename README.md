@@ -11,7 +11,7 @@ As of **14/09/19** I am having trouble getting the bot to do what I want. The fu
 
 **16/09/19** I wanted to change the way command arguments were checked, but apparently switches aren't really possible. At least not when I before hand wanted to make a check if there were more than one argument. I might return to it later to see of something can be done. I found help online to help me get the filesave working. Based on user ID I can now make an entry with what I need. I should be able to parse it and check entries, but that remains to be seen.
 
-**19/09/19** Worked on a couple of things throughout the days, finally got the dice function to work like I want it to.
+**19/09/19** Worked on a couple of things throughout the days, finally got the dice function to work like I want it to. Added a modifier for the dice roll as well. Think it works alright, but the code is nowhere clean. Might return to that. !reroll would be a cool function to have, so I'll definitely add that someday.
 
 # To Do
 A list of all the things I would like the bot to do.
@@ -21,4 +21,5 @@ A list of all the things I would like the bot to do.
 * [ ] Move user to game specific channel - useful for often-played games
 * [ ] Work in something with Steam API?
 * [x] Dice rolling
-* [ ] Add modifiers to dice
+* [x] Add modifiers to dice
+* [ ] Add !reroll command, rolls the last rolled set of dice and mod
