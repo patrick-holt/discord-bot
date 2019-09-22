@@ -48,6 +48,19 @@ client.on('message', msg => {
     // I am aware that people can cheat by changing their names, maybe use client ID instead?
     msg.reply('Whattup your sexy husk of meat?');
   }
+
+  // If Mikkel tries something
+  if (msg.content === 'give spoilers' && msg.author.username === 'Theproblocker') {
+    let min = 1;
+    let max = 10;
+    let randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+    if (randomNum < 6) {
+      var answerString = "Han Solo is Harry's father!";
+    } else if (randomNum >= 6) {
+      var answerString = "Jon Snow was a firefighter during 9/11!";
+    }
+    msg.reply(answerString);
+  }
 });
 
 // Part that handles the decission on moving the user
