@@ -47,6 +47,8 @@ client.on('message', msg => {
   if (msg.content === 'sup bot?' && msg.author.username === 'Musk') {
     // I am aware that people can cheat by changing their names, maybe use client ID instead?
     msg.reply('Whattup your sexy husk of meat?');
+  } else if (msg.content === 'sup bot?') {
+    msg.reply("You're not my summer prince...")
   }
 
   // If Mikkel tries something
