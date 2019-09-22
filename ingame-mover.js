@@ -207,11 +207,15 @@ async function DiceRoll(arguments, receivedMessage) {
     }
   }
 
+  let resultSum = 0; // Variable to keept track of sum
+
   // Rolling the die
   for (i = 0; i < diceAmount; i++) {
     let min = 1; // Min value on die always 1
     let max = diceType;
     let result = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    resultSum = resultSum + Number(result);
 
     if (addition !== null) {
       if (addition) {
@@ -236,6 +240,7 @@ async function DiceRoll(arguments, receivedMessage) {
     }
   }
 
+  console.log(resultSum);
   receivedMessage.reply(`(nat) mod ${sym} ${modifier}` + stringResults);
 }
 
