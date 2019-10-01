@@ -2,7 +2,7 @@ const fs = require('fs'); //importing file save
 const Discord = require('discord.js');
 const client = new Discord.Client();
 // For use on my own system
-const auth = require('./auth.json');
+//const auth = require('./auth.json');
 
 // Channel IDs
 const generalVoice = '602869084085944334';
@@ -340,5 +340,5 @@ function CheckUserOpt(user) {
 //
 
 // Use the first one if on my own system, second is for Heroku
-client.login(auth.token);
-//client.login(process.env.CLIENT_TOKEN);
+//client.login(auth.token);
+client.login(process.env.CLIENT_TOKEN);
