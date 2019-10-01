@@ -2,7 +2,7 @@ const fs = require('fs'); //importing file save
 const Discord = require('discord.js');
 const client = new Discord.Client();
 // For use on my own system
-//const auth = require('./auth.json');
+const auth = require('./auth.json');
 
 // Channel IDs
 const generalVoice = '602869084085944334';
@@ -11,6 +11,7 @@ const roleAdminID = 'Holt#3497';
 
 // Variables
 var movementOn = true;
+var oldArguments;
 
 // Event, when bot first runs
 client.on('ready', () => {
@@ -48,7 +49,7 @@ client.on('message', msg => {
     // I am aware that people can cheat by changing their names, maybe use client ID instead?
     msg.reply('Whattup your sexy husk of meat?');
   } else if (msg.content === 'sup bot?') {
-    msg.reply("You're not my summer prince...")
+    msg.reply("You're not my summer prince...");
   }
 
   // If Mikkel tries something
@@ -121,7 +122,10 @@ function ProcessCommand(receivedMessage) {
   } else if (primaryCommand == 'move') {
     MoveCommand(arguments, receivedMessage);
   } else if (primaryCommand == 'roll') {
+    oldArguments = arguments;
     DiceRoll(arguments, receivedMessage);
+  } else if (primaryCommand == 'reroll') {
+    DiceRoll(oldArguments, receivedMessage);
   } else {
     receivedMessage.reply("Command does not exist")
   }
@@ -232,6 +236,12 @@ async function DiceRoll(arguments, receivedMessage) {
 
     resultSum = resultSum + Number(result);
 
+    /*
+
+    // This whole part works, but the way it rolls is not optimal for getting
+    // quick results. A more simplied version will be added below
+
+    // This part adds the modifier to each roll
     if (addition !== null) {
       if (addition) {
         var modifiedResult = Number(result) + Number(modifier); // Turn into number and add
@@ -253,10 +263,33 @@ async function DiceRoll(arguments, receivedMessage) {
       stringResults = stringResults + filler + (i+1) + ': '
       + `(${result}) ` + modifiedResult;
     }
+    */
+
+    // Simplified Roller
+    if (i == 0) {
+      var stringResults = result + ' + ';
+    } else if (i != diceAmount - 1) {
+      stringResults = stringResults + result + ' + ';
+    } else {
+      stringResults = stringResults + result;
+    }
   }
 
-  console.log(resultSum);
-  receivedMessage.reply(`(nat) mod ${sym} ${modifier}` + stringResults);
+  //receivedMessage(`(nat) mod ${sym} ${modifier}` + stringResults);
+  let rollInfo = `Rolling ${diceAmount} d${diceType}, ${sym} ${modifier} \n`;
+
+  if (sym === '+') {
+    let modifiedResult = Number(resultSum) + Number(modifier);
+    receivedMessage.reply(`${rollInfo}\
+    Roll: ${stringResults} = ${resultSum} + ${modifier} = ${modifiedResult}`);
+  } else if (sym === '-') {
+    let modifiedResult = Number(resultSum) - Number(modifier);
+    receivedMessage.reply(`${rollInfo}\
+    Roll: ${stringResults} = ${resultSum} - ${modifier} = ${modifiedResult}`);
+  } else {
+    receivedMessage.reply(`${rollInfo}\
+    Roll: ${stringResults} = ${resultSum}`);
+  }
 }
 
 function OptInUser(user) {
@@ -307,5 +340,5 @@ function CheckUserOpt(user) {
 //
 
 // Use the first one if on my own system, second is for Heroku
-//client.login(auth.token);
-client.login(process.env.CLIENT_TOKEN);
+client.login(auth.token);
+//client.login(process.env.CLIENT_TOKEN);
