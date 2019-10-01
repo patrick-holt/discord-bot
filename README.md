@@ -23,3 +23,4 @@ A list of all the things I would like the bot to do.
 * [x] Dice rolling
 * [x] Add modifiers to dice
 * [ ] Add !reroll command, rolls the last rolled set of dice and mod
+* [ ] Add extra comment when d20 rolls 1 or 20
